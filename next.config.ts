@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       allowedOrigins: [
         "localhost:3000",
         "thrift.tenexis.in",
+        "tenexis-thrift.tenexis.workers.dev",
         "hdtr68dq-3000.inc1.devtunnels.ms",
       ],
     },
