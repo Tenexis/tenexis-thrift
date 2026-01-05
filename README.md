@@ -50,3 +50,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 pnpm create cloudflare@latest . --framework=next
 pnpm add @react-oauth/google jose
+pnpm dev
+pnpm dlx shadcn@latest init
+pnpm dlx shadcn@latest add card button
+pnpm add @tabler/icons-react
