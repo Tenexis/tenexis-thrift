@@ -1,8 +1,8 @@
 // data/nav.ts
 import { 
-  Sparkles, Leaf, Gift, Store, ShoppingBag, BookOpen, 
-  Repeat, Tag, Search, HardDrive, Bike, Watch, 
-  Shirt, Scissors, Smartphone, Sofa, Footprints, 
+  ShoppingBag, BookOpen, 
+  Repeat, Search, Bike, Watch, 
+  Shirt, Scissors, Smartphone, Sofa, 
   Layers, type LucideIcon 
 } from "lucide-react";
 
