@@ -38,18 +38,16 @@ import { NAV_ITEMS } from "@/data/nav";
 interface UserProfile {
   name: string;
   email: string;
-  picture?: string; // Optional because some Google accounts might not have one
-  image?: string;   // Handle both 'picture' (DB) or 'image' (Google) keys if they differ
+  picture?: string;
+  image?: string;
 }
 
-// 2. Define the Props for the Component
 interface SiteHeaderProps {
   user: UserProfile | null;
 }
 
 export function SiteHeader({ user }: SiteHeaderProps) {
   const router = useRouter();
-  // const user = null;
 
  const handleLogout = async () => {
     await logoutAction();
@@ -141,7 +139,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   <Avatar className="h-9 w-9 border border-zinc-200 dark:border-zinc-800">
                     <AvatarImage src={user.picture} alt="User Avatar" />
                     <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                      {/* Generates initials "JD" from "John Doe" */}
                       {user.name ? user.name.slice(0, 2).toUpperCase() : "U"}
                     </AvatarFallback>
                   </Avatar>

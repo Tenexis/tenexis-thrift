@@ -4,9 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/header";
 import { SiteFooter } from "@/components/footer";
-import { getSession } from "./actions/auth";
+import { getUser } from "@/lib/get-user";
 
-// Primary Branding Font
 const outfit = Outfit({ 
   subsets: ['latin'], 
   variable: '--font-outfit' 
@@ -37,7 +36,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getSession();
+  const user = await getUser();
 
   return (
     <html lang="en" suppressHydrationWarning>

@@ -1,7 +1,6 @@
 'use client'
 
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google'
-// Import from your unified actions file
 import { loginWithGoogleAction } from '@/app/actions/auth' 
 import { useRouter } from 'next/navigation'
 import {
@@ -17,15 +16,12 @@ export default function LoginPage() {
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
-      // 1. Perform server-side login (sets cookie)
       const result = await loginWithGoogleAction(credentialResponse.credential)
       
       if (result.success) {
         console.log("Login successful!")
-        // 2. Refresh the router to update Server Components (like SiteHeader)
         router.refresh() 
-        // 3. Redirect to dashboard
-        router.push('/dashboard') 
+        router.push('/') 
       } else {
         console.error("Login failed", result.error)
       }
