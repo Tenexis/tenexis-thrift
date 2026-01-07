@@ -54,3 +54,11 @@ pnpm dev
 pnpm dlx shadcn@latest init
 pnpm dlx shadcn@latest add card button
 pnpm add @tabler/icons-react
+pnpm dlx shadcn@latest add navigation-menu
+pnpm dlx shadcn@latest add dropdown-menu
+pnpm add next-themes
+pnpm add framer-motion
+pnpm install @radix-ui/react-dropdown-menu
+pnpm install @radix-ui/react-navigation-menu
+pnpm dlx shadcn@latest add avatar
+pnpm install @radix-ui/react-avatar

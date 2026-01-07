@@ -1,7 +1,8 @@
 'use client'
 
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google'
-import { loginWithGoogleAction } from '@/app/actions/auth'
+// Import from your unified actions file
+import { loginWithGoogleAction } from '@/app/actions/auth' 
 import { useRouter } from 'next/navigation'
 import {
   Card,
@@ -16,12 +17,15 @@ export default function LoginPage() {
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
+      // 1. Perform server-side login (sets cookie)
       const result = await loginWithGoogleAction(credentialResponse.credential)
       
       if (result.success) {
         console.log("Login successful!")
-        router.push('/dashboard') 
+        // 2. Refresh the router to update Server Components (like SiteHeader)
         router.refresh() 
+        // 3. Redirect to dashboard
+        router.push('/dashboard') 
       } else {
         console.error("Login failed", result.error)
       }
@@ -30,7 +34,6 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50 dark:bg-zinc-900 p-4">
-      {/* Shadcn Card Component */}
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center space-y-1">
           <CardTitle className="text-2xl font-bold tracking-tight">
@@ -43,7 +46,6 @@ export default function LoginPage() {
         
         <CardContent className="grid gap-4 pt-4 pb-8">
           <div className="flex flex-col items-center justify-center space-y-4">
-            {/* The Google Button */}
             <div className="w-full flex justify-center">
               <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
                 <GoogleLogin
@@ -51,7 +53,7 @@ export default function LoginPage() {
                   onError={() => console.log('Login Failed')}
                   theme="outline" 
                   size="large"
-                  width="300" // Forces the button to be wider
+                  width="300"
                   text="signin_with"
                   shape="rectangular"
                   useOneTap
@@ -61,14 +63,9 @@ export default function LoginPage() {
             
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
-              <a href="/terms" className="underline underline-offset-4 hover:text-primary">
-                Terms of Service
-              </a>{" "}
+              <a href="/terms" className="underline underline-offset-4 hover:text-primary">Terms of Service</a>{" "}
               and{" "}
-              <a href="/privacy" className="underline underline-offset-4 hover:text-primary">
-                Privacy Policy
-              </a>
-              .
+              <a href="/privacy" className="underline underline-offset-4 hover:text-primary">Privacy Policy</a>.
             </p>
           </div>
         </CardContent>
