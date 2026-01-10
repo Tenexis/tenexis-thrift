@@ -1,13 +1,10 @@
 'use server'
 
-import { TokenResponse } from '@react-oauth/google';
 import { cookies } from 'next/headers'
 
-export interface UserProfile {
-  name: string;
-  email: string;
-  picture?: string;
-  image?: string; 
+interface BackendTokenResponse {
+  access_token: string;
+  token_type: string;
 }
 
 export async function loginWithGoogleAction(credential: string) {
@@ -18,12 +15,13 @@ export async function loginWithGoogleAction(credential: string) {
       body: JSON.stringify({ credential }),
     })
 
-    if (!response.ok) return { success: false, error: 'Backend verification failed' }
+    if (!response.ok) {
+      return { success: false, error: 'Backend verification failed' }
+    }
 
-    const data = (await response.json()) as TokenResponse
+    const data = (await response.json()) as BackendTokenResponse
 
     const cookieStore = await cookies()
-    
     cookieStore.set('session_token', data.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -31,7 +29,8 @@ export async function loginWithGoogleAction(credential: string) {
       path: '/',
     })
 
-    return { success: true }
+    return { success: true, token: data.access_token }
+
   } catch (error) {
     console.error("Auth Error:", error)
     return { success: false, error: 'Internal Server Error' }
@@ -42,6 +41,29 @@ export async function logoutAction() {
   const cookieStore = await cookies()
   cookieStore.delete('session_token')
   return { success: true }
+}
+
+export interface UserProfile {
+  id: number;
+  email: string;
+  username: string;
+  name: string;
+  picture?: string;
+
+  // Onboarding fields
+  phone_number?: string;
+  is_phone_verified?: boolean;
+  gender?: string;
+  roll_number?: string;
+  official_name?: string;
+  is_college_verified?: boolean;
+
+  college?: {
+    id: number;
+    name: string;
+    slug: string;
+    city?: string;
+  };
 }
 
 export async function getSession(): Promise<UserProfile | null> {
@@ -55,14 +77,15 @@ export async function getSession(): Promise<UserProfile | null> {
     const res = await fetch(`${backendUrl}/api/users/me`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store", 
+      cache: "no-store",
     });
     if (!res.ok) return null;
-    
+
     const user = await res.json();
     return user as UserProfile;
 
   } catch (error) {
+    console.log(error);
     return null;
   }
 }

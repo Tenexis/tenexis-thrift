@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/header";
 import { SiteFooter } from "@/components/footer";
 import { getUser } from "@/lib/get-user";
+import { OnboardingModal } from "@/components/onboarding-modal";
+import { UserProfile } from "@/app/actions/auth";
 
 const outfit = Outfit({ 
   subsets: ['latin'], 
@@ -36,7 +38,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getUser();
+  const user: UserProfile | null = await getUser();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -62,6 +64,7 @@ export default async function RootLayout({
               {children}
             </main>
             <SiteFooter />
+            <OnboardingModal user={user} />
           </div>
         </ThemeProvider>
       </body>

@@ -1,10 +1,5 @@
 import { cookies } from 'next/headers'
-
-export interface UserProfile {
-  name: string;
-  email: string;
-  picture?: string;
-}
+import { UserProfile } from "@/app/actions/auth";
 
 export async function getUser(): Promise<UserProfile | null> {
   const cookieStore = await cookies()
@@ -19,9 +14,10 @@ export async function getUser(): Promise<UserProfile | null> {
       },
       cache: 'no-store' 
     })
-
+    console.log(res);
     if (res.ok) {
       const user = (await res.json()) as UserProfile
+      console.log(user);
       return user 
     }
   } catch (e) {
