@@ -7,6 +7,19 @@ interface BackendTokenResponse {
   token_type: string;
 }
 
+export async function updateSessionToken(newToken: string) {
+  const cookieStore = await cookies()
+  
+  cookieStore.set('session_token', newToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: '/',
+  })
+
+  return { success: true }
+}
+
 export async function loginWithGoogleAction(credential: string) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/google`, {
