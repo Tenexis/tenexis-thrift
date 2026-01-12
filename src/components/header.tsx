@@ -34,13 +34,7 @@ import { Button } from "@/components/ui/button";
 
 import { TenexisText } from "./ui/tenexisText";
 import { NAV_ITEMS } from "@/data/nav";
-
-interface UserProfile {
-  name: string;
-  email: string;
-  picture?: string;
-  image?: string;
-}
+import { UserProfile } from "@/app/actions/auth";
 
 interface SiteHeaderProps {
   user: UserProfile | null;

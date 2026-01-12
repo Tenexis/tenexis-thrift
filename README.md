@@ -62,3 +62,14 @@ pnpm install @radix-ui/react-dropdown-menu
 pnpm install @radix-ui/react-navigation-menu
 pnpm dlx shadcn@latest add avatar
 pnpm install @radix-ui/react-avatar
+pnpm install jwt-decodeH
+pnpm dlx shadcn@latest add badge tabs separator input label textarea
+pnpm dlx shadcn@latest add button input progress input-otp command popover
+pnpm install @radix-ui/react-slot 
+pnpm install @radix-ui/react-dialog 
+pnpm install @radix-ui/react-label 
+pnpm install @radix-ui/react-popover 
+pnpm install @radix-ui/react-progress 
+pnpm install @radix-ui/react-separator 
+pnpm install @radix-ui/react-tabs 
+pnpm dlx shadcn@latest add alert

@@ -1,15 +1,20 @@
 'use client'
 
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google'
-import { loginWithGoogleAction } from '@/app/actions/auth' 
+import { loginWithGoogleAction } from '@/app/actions/auth'
 import { useRouter } from 'next/navigation'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { jwtDecode } from "jwt-decode"; // You might need to install this: npm install jwt-decode
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+
+interface TokenPayload {
+  sub: string;
+  user_id: number;
+  username: string;
+  college_slug: string | null;
+  is_verified: boolean;
+  is_onboarded: boolean; // This is the key field we need
+  exp: number;
+}
 
 export default function LoginPage() {
   const router = useRouter()
@@ -17,11 +22,19 @@ export default function LoginPage() {
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
       const result = await loginWithGoogleAction(credentialResponse.credential)
-      
-      if (result.success) {
-        console.log("Login successful!")
-        router.refresh() 
-        router.push('/') 
+
+      if (result.success && result.token) { // Ensure your action returns the token string too
+        // Decode to check onboarding status
+        const decoded = jwtDecode<TokenPayload>(result.token);
+        console.log("Login successful!", decoded);
+
+        router.refresh()
+
+        if (decoded.is_onboarded) {
+          router.push('/')
+        } else {
+          router.push('/onboarding') // Redirects to the form you made earlier
+        }
       } else {
         console.error("Login failed", result.error)
       }
@@ -29,41 +42,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50 dark:bg-zinc-900 p-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4">
+      <Card className="w-full max-w-md shadow-xl border-zinc-200 dark:border-zinc-800">
         <CardHeader className="text-center space-y-1">
-          <CardTitle className="text-2xl font-bold tracking-tight">
-            Welcome back
-          </CardTitle>
-          <CardDescription>
-            Sign in to your Tenexis account to continue
-          </CardDescription>
+          <CardTitle className="text-3xl font-bold tracking-tight">Tenexis</CardTitle>
+          <CardDescription>Campus Marketplace & Lost/Found</CardDescription>
         </CardHeader>
-        
-        <CardContent className="grid gap-4 pt-4 pb-8">
-          <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="w-full flex justify-center">
-              <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-                <GoogleLogin
-                  onSuccess={handleSuccess}
-                  onError={() => console.log('Login Failed')}
-                  theme="outline" 
-                  size="large"
-                  width="300"
-                  text="signin_with"
-                  shape="rectangular"
-                  useOneTap
-                />
-              </GoogleOAuthProvider>
-            </div>
-            
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
-              <a href="/terms" className="underline underline-offset-4 hover:text-primary">Terms of Service</a>{" "}
-              and{" "}
-              <a href="/privacy" className="underline underline-offset-4 hover:text-primary">Privacy Policy</a>.
-            </p>
-          </div>
+        <CardContent className="flex justify-center pb-8 pt-4">
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+            <GoogleLogin
+              onSuccess={handleSuccess}
+              onError={() => console.log('Login Failed')}
+              theme="outline"
+              size="large"
+              shape="pill"
+              width="300"
+            />
+          </GoogleOAuthProvider>
         </CardContent>
       </Card>
     </div>
