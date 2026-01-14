@@ -1,7 +1,8 @@
+import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { UserProfile } from "@/app/actions/auth";
 
-export async function getUser(): Promise<UserProfile | null> {
+async function fetchUser(): Promise<UserProfile | null> {
   const cookieStore = await cookies()
   const token = cookieStore.get('session_token')?.value
 
@@ -12,13 +13,11 @@ export async function getUser(): Promise<UserProfile | null> {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      cache: 'no-store' 
+      next: { revalidate: 0, tags: ['user'] }
     })
-    // console.log(res);
     if (res.ok) {
       const user = (await res.json()) as UserProfile
-      console.log(user);
-      return user 
+      return user
     }
   } catch (e) {
     console.error("Failed to fetch user", e)
@@ -26,3 +25,6 @@ export async function getUser(): Promise<UserProfile | null> {
 
   return null
 }
+
+// Memoize within a single request to avoid duplicate fetches in the same render
+export const getUser = cache(fetchUser)

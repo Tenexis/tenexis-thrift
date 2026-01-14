@@ -8,6 +8,7 @@ import { logoutAction } from "@/app/actions/auth";
 
 // Icons
 import { LogOut, User, Settings } from "lucide-react";
+import { LoginLink } from "@/components/login-link";
 
 // Shadcn Components
 import {
@@ -43,15 +44,15 @@ interface SiteHeaderProps {
 export function SiteHeader({ user }: SiteHeaderProps) {
   const router = useRouter();
 
- const handleLogout = async () => {
+  const handleLogout = async () => {
     await logoutAction();
-    router.refresh();
+    router.push('/');  // Navigate to home, revalidation handled in action
   };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center">
-        
+
         {/* 1. Logo (Left) */}
         <Link href="/" className="mr-6 hover:opacity-80 transition-opacity shrink-0">
           <TenexisText />
@@ -119,7 +120,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
           </NavigationMenuList>
           {/* Viewport for Nav Animations */}
           <div className="absolute top-full left-0 flex justify-center w-full">
-             <NavigationMenuViewport className="origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out md:w-[var(--radix-navigation-menu-viewport-width)]" />
+            <NavigationMenuViewport className="origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out md:w-[var(--radix-navigation-menu-viewport-width)]" />
           </div>
         </NavigationMenu>
 
@@ -171,9 +172,9 @@ export function SiteHeader({ user }: SiteHeaderProps) {
               <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
                 <Link href="/about">About</Link>
               </Button>
-              <Button asChild size="sm">
-                <Link href="/login">Log in</Link>
-              </Button>
+              <LoginLink size="sm" showIcon={false}>
+                Log in
+              </LoginLink>
             </div>
           )}
         </div>

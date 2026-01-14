@@ -30,6 +30,7 @@ import { ProductType, ProductVisibility } from '@/lib/types';
 import { ProductImageGallery } from '@/components/product-image-gallery';
 import { ProductsGrid } from '@/components/products-grid';
 import { cn } from '@/lib/utils';
+import { LoginLink } from '@/components/login-link';
 
 interface ProductPageProps {
     params: Promise<{ slug: string }>;
@@ -129,7 +130,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-                    
+
                     {/* Left: Image Gallery */}
                     <div className="w-full">
                         <ProductImageGallery images={product.images} title={product.title} />
@@ -137,7 +138,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
                     {/* Right: Product Details */}
                     <div className="flex flex-col gap-6">
-                        
+
                         {/* Header Section */}
                         <div className="space-y-4">
                             <div className="flex flex-wrap items-center gap-2">
@@ -242,12 +243,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                             Contact Seller
                                         </Button>
                                     ) : (
-                                        <Button size="lg" className="flex-1 rounded-full text-base font-semibold shadow-md" asChild>
-                                            <Link href="/login">
-                                                <Lock className="w-4 h-4 mr-2" />
-                                                Sign in to Contact
-                                            </Link>
-                                        </Button>
+                                        <LoginLink size="lg" className="flex-1 rounded-full text-base font-semibold shadow-md">
+                                            Sign in to Contact
+                                        </LoginLink>
                                     )}
 
                                     <Button size="lg" variant="outline" className="rounded-full px-6">
@@ -284,7 +282,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                                 {product.user?.name?.[0]?.toUpperCase() || 'U'}
                                             </AvatarFallback>
                                         </Avatar>
-                                        
+
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
                                                 <p className="font-semibold text-foreground text-lg truncate">
@@ -317,11 +315,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                                             Sign in to view the seller&apos;s verified name, college, and contact info.
                                         </p>
                                     </div>
-                                    <Button variant="secondary" className="px-6 rounded-full" asChild>
-                                        <Link href="/login">
-                                            Sign in to View
-                                        </Link>
-                                    </Button>
+                                    <LoginLink variant="secondary" className="px-6 rounded-full">
+                                        Sign in to View
+                                    </LoginLink>
                                 </div>
                             )}
                         </div>

@@ -1,6 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 
 interface BackendTokenResponse {
   access_token: string;
@@ -9,13 +10,16 @@ interface BackendTokenResponse {
 
 export async function updateSessionToken(newToken: string) {
   const cookieStore = await cookies()
-  
+
   cookieStore.set('session_token', newToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 7, // 1 week
     path: '/',
   })
+
+  // Revalidate the layout to refresh user state
+  revalidatePath('/', 'layout')
 
   return { success: true }
 }
@@ -42,6 +46,9 @@ export async function loginWithGoogleAction(credential: string) {
       path: '/',
     })
 
+    // Revalidate the entire layout to refresh user state everywhere
+    revalidatePath('/', 'layout')
+
     return { success: true, token: data.access_token }
 
   } catch (error) {
@@ -53,6 +60,10 @@ export async function loginWithGoogleAction(credential: string) {
 export async function logoutAction() {
   const cookieStore = await cookies()
   cookieStore.delete('session_token')
+
+  // Revalidate the entire layout to clear user state everywhere
+  revalidatePath('/', 'layout')
+
   return { success: true }
 }
 

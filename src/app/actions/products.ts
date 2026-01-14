@@ -17,7 +17,7 @@ export async function getProducts(): Promise<Product[]> {
 
         const res = await fetch(`${API_BASE_URL}/api/products/`, {
             headers,
-            cache: 'no-store',
+            next: { revalidate: 60, tags: ['products'] }, // Revalidate every 60 seconds
         })
 
         if (!res.ok) {
@@ -26,7 +26,6 @@ export async function getProducts(): Promise<Product[]> {
         }
 
         const products = await res.json()
-        console.log("Product Get: ", products);
         return products as Product[]
     } catch (error) {
         console.error('Error fetching products:', error)
@@ -46,7 +45,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
         const res = await fetch(`${API_BASE_URL}/api/products/${slug}`, {
             headers,
-            cache: 'no-store',
+            next: { revalidate: 120, tags: ['products', `product-${slug}`] }, // Cache for 2 minutes
         })
 
         if (!res.ok) {
@@ -54,7 +53,6 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
         }
 
         const product = await res.json()
-        console.log("Product Slog: ", product);
         return product as Product
     } catch (error) {
         console.error('Error fetching product:', error)
@@ -65,7 +63,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getCategories(): Promise<Category[]> {
     try {
         const res = await fetch(`${API_BASE_URL}/api/categories/`, {
-            cache: 'no-store',
+            next: { revalidate: 300 }, // Cache for 5 minutes (categories rarely change)
         })
 
         if (!res.ok) {
