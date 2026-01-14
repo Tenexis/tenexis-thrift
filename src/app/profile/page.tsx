@@ -32,7 +32,7 @@ interface UserData {
 }
 
 // Replace with your actual WhatsApp number
-const TENEXIS_WHATSAPP = "919876543210";
+const TENEXIS_WHATSAPP = "919100474412";
 
 export default function ProfileSettingsPage() {
     const router = useRouter();

@@ -1,6 +1,38 @@
 import type { NextConfig } from "next";
 
+// Enable calling `getCloudflareContext()` in `next dev`.
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev();
+
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      // 1. Google Images (for User Profiles)
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
+      // 2. Your API / DevTunnels (for Product Images)
+      {
+        protocol: "https",
+        hostname: "**.devtunnels.ms", // Matches any devtunnel subdomain
+      },
+      // 3. Localhost (if you run backend locally without tunnel)
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      }
+    ],
+  },
+
   experimental: {
     serverActions: {
       allowedOrigins: [
@@ -27,8 +59,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-// Enable calling `getCloudflareContext()` in `next dev`.
-// See https://opennext.js.org/cloudflare/bindings#local-access-to-bindings.
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev();

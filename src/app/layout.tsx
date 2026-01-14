@@ -7,15 +7,16 @@ import { SiteFooter } from "@/components/footer";
 import { getUser } from "@/lib/get-user";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import { UserProfile } from "@/app/actions/auth";
+import { Toaster } from "@/components/ui/sonner";
 
-const outfit = Outfit({ 
-  subsets: ['latin'], 
-  variable: '--font-outfit' 
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit'
 });
 
-const dmSans = DM_Sans({ 
-  subsets: ['latin'], 
-  variable: '--font-sans' 
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans'
 });
 
 const geistSans = Geist({
@@ -42,7 +43,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body 
+      <body
         className={`
           ${dmSans.variable} 
           ${outfit.variable} 
@@ -65,6 +66,7 @@ export default async function RootLayout({
             </main>
             <SiteFooter />
             <OnboardingModal user={user} />
+            <Toaster position="top-right" richColors closeButton />
           </div>
         </ThemeProvider>
       </body>

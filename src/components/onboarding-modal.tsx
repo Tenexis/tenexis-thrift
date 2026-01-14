@@ -122,13 +122,13 @@ export function OnboardingModal({ user }: { user: UserProfile | null }) {
 
     const handleFinalSubmit = async () => {
         setLoading(true);
-        console.log({
-                phone_number: phone,
-                gender: gender,
-                official_name: officialName,
-                roll_number: rollNumber,
-                college_slug: selectedCollege?.slug // Using Slug instead of ID
-            });
+        // console.log({
+        //         phone_number: phone,
+        //         gender: gender,
+        //         official_name: officialName,
+        //         roll_number: rollNumber,
+        //         college_slug: selectedCollege?.slug // Using Slug instead of ID
+        //     });
         try {
             if (!selectedCollege) {
                 alert("Please select your college");
@@ -143,7 +143,7 @@ export function OnboardingModal({ user }: { user: UserProfile | null }) {
                 college_slug: selectedCollege.slug // Using Slug instead of ID
             };
 
-            console.log(payload);
+            // console.log(payload);
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/onboarding`, {
                 method: 'PATCH',
@@ -151,7 +151,7 @@ export function OnboardingModal({ user }: { user: UserProfile | null }) {
                 body: JSON.stringify(payload)
             });
 
-            console.log(res.ok);
+            // console.log(res.ok);
             
             if (res.ok) {
                 interface OnboardingResponse {
@@ -160,7 +160,7 @@ export function OnboardingModal({ user }: { user: UserProfile | null }) {
                     user: UserProfile;
                 }
                 const responseData = (await res.json()) as OnboardingResponse;
-                console.log(responseData);
+                // console.log(responseData);
                 if (responseData.access_token) {
                     await updateSessionToken(responseData.access_token);
                 }
